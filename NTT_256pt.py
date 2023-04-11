@@ -1,10 +1,10 @@
 import numpy as np
 
-# Function to perform (base^power) mod M
-def modExponent(base, power, M):
+# Function to perform (base^power) mod q
+def modExponent(base, power, q):
     result = 1
     for i in range(0, power):
-        result = (result * base) % M
+        result = (result * base) % q
     return result
 
 # Function to perform bit reversal operation   
@@ -16,24 +16,24 @@ def bitReverse(num, N):
     return rev_num
 
 # Function to generate Twiddle factors for DIF NTT
-def gen_tf(wn, N, M):
+def gen_tf(wn, N, q):
     tf = []
     for i in range(N//2):
         tf.append(1)
         for j in range(0, bitReverse(i, int(np.log2(N//2)))):
-            tf[i] = (tf[i] * wn) % M
+            tf[i] = (tf[i] * wn) % q
     tf = orderReverse(tf, int(np.log2(N//2)))
     return tf
 
 # Function to compute N-point DIF NTT
-def dif_ntt(x, wl, M, N):
+def dif_ntt(x, wl, q, N):
     ns = 1
     y = [0]*N
     for k in range(int(np.log2(N))):
         for j in range(ns):
             for i in range(N//(2*ns)):
-                y[i + j*N//ns] = (x[i + j*N//ns] + x[i + N//(2*ns) + j*N//ns]) % M
-                y[i + N//(2*ns) + j*N//ns] = (((x[i + j*N//ns] - x[i + N//(2*ns) + j*N//ns]) % M) * wl[(ns * i) % (N//2)]) % M
+                y[i + j*N//ns] = (x[i + j*N//ns] + x[i + N//(2*ns) + j*N//ns]) % q
+                y[i + N//(2*ns) + j*N//ns] = (((x[i + j*N//ns] - x[i + N//(2*ns) + j*N//ns]) % q) * wl[(ns * i) % (N//2)]) % q
             x = y.copy()
         ns = ns*2
     yf = [0]*N
@@ -68,19 +68,19 @@ x = [7614, 5147, 6806, 5503, 3750, 5037, 6683, 6413, 5928, 5539, 2072, 568,
 # N is length of input, output and size of NTT
 N = 256
 
-# M is operating modulus
-M = 7681
+# q is operating modulus
+q = 7681
 
 # wn is primitve Nth root of unity
 wn = 2028
 
 
-wl = gen_tf(wn, N, M)
-y = dif_ntt(x, wl, M, N)
+wl = gen_tf(wn, N, q)
+y = dif_ntt(x, wl, q, N)
 
 #print("Inputs:", x)
 #print("Twiddle Factors:", wl)
 #print("Outputs:", y)
-print(N, "- point NTT for the given input under mod", M, "is:")
+print(N, "- point NTT for the given input under mod", q, "is:")
 print(y)
 
