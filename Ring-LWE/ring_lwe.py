@@ -10,8 +10,8 @@ n = 512     # Length of polynomials (512 or 1024 for NewHope)
 wn, inv_wn, psin, inv_psin, inv_n = ntt.getParams(n)
 
 # Generating scaling factors and twiddle factors
-w1 = ntt.gen_tf(wn, n, q)
-s1 = ntt.gen_sf(psin, n, q)
+wl = ntt.gen_tf(wn, n, q)
+sl = ntt.gen_sf(psin, n, q)
 inv_wl = ntt.gen_tf(inv_wn, n, q)
 inv_sl = ntt.gen_sf(inv_psin, n, q)
 
@@ -24,12 +24,12 @@ def poly_mul_ntt(x1, x2):
 	x1d = []
 	x2d = []
 	for i in range(n):
-		x1d.append((x1[i]*s1[i])%q)
-		x2d.append((x2[i]*s1[i])%q)
+		x1d.append((x1[i]*sl[i])%q)
+		x2d.append((x2[i]*sl[i])%q)
 
 	# Forward NTT
-	y1 = ntt.dif_ntt(x1d, w1, q, n)
-	y2 = ntt.dif_ntt(x2d, w1, q, n)
+	y1 = ntt.dif_ntt(x1d, wl, q, n)
+	y2 = ntt.dif_ntt(x2d, wl, q, n)
 
 	# Point-wise multiplication
 	y3 = []
