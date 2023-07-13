@@ -9,7 +9,7 @@ def bitReverse(num, logn):
     return rev_num
 
 # Function to generate twiddle factors (for both forward and inverse NTT)
-def gen_tf(psin, n, q):
+def gen_tf(psin, inv_psin, n, q):
     positions = [bitReverse(x, int(np.log2(n))) for x in range(n)]
     tmp1, tmp2 = [], []
     psis, inv_psis = [], []
