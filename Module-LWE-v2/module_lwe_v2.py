@@ -11,7 +11,7 @@ psin = 17
 inv_psin = 1175
 
 # Get pre-computed factors
-psis, inv_psis = ntt2.gen_tf(psin, n, q)
+psis, inv_psis = ntt2.gen_tf(psin, inv_psin, n, q)
 pwmf = ntt2.gen_pwmf(psin, n, q)
 
 
