@@ -9,6 +9,7 @@ n = 128
 inv_n = 3303
 psin = 17
 inv_psin = 1175
+k = 2
 
 # Get pre-computed factors
 psis, inv_psis = ntt2.gen_tf(psin, inv_psin, n, q)
