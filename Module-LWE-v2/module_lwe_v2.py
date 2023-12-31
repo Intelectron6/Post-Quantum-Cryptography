@@ -62,11 +62,11 @@ def encrypt(a, b, m):
 
 # Decryption function (to be performed by server)
 def decrypt(s, u, v):
-        p0 = np.array(poly_mul_ntt(s[0], u[0]))
-        p1 = np.array(poly_mul_ntt(s[1], u[1]))
-        p = (p0 + p1) % q
-        d = (v - p) % q
-        return d
+	p0 = np.array(poly_mul_ntt(s[0], u[0]))
+	p1 = np.array(poly_mul_ntt(s[1], u[1]))
+	p = (p0 + p1) % q
+	d = (v - p) % q
+	return d
 
 
 # Randomly generated binary message, m
