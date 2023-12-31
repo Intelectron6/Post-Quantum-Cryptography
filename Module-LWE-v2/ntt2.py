@@ -74,3 +74,33 @@ def gs_intt(a, inv_psis, q, n, inv_n):
     for i in range(n):
         a[i] = a[i] * inv_n % q
     return a
+
+# Function to compute 256 point NTT by splitting into even and odd terms and computing 128 point NTT for each 
+def ntt_256(x, psis, q, n):
+    xe, xo = [], []
+    for i in range(n2):
+        if i%2 == 0:
+            xe.append(x[i])
+        else:
+            xo.append(x[i])
+    ye = ct_ntt(xe, psis, q, n)
+    yo = ct_ntt(xo, psis, q, n)
+    return ye, yo
+
+# Function to compute 256 point Inverse NTT by combining 128 point Inverse NTT of even and odd terms
+def intt_256(ye, yo, inv_psis, q, n, inv_n):
+    ze = gs_intt(ye, inv_psis, q, n, inv_n)
+    zo = gs_intt(yo, inv_psis, q, n, inv_n)
+    z = []
+    for i in range(n):
+        z.append(ze[i])
+        z.append(zo[i])
+    return z
+
+# Function to perform point-wise multipication
+def point_wise_mult(y1e, y1o, y2e, y2o, pwmf):
+    y3e, y3o = [], []
+    for i in range(n):
+        y3e.append(((y1e[i] * y2e[i]) % q + (((y1o[i] * y2o[i]) % q) * pwmf[i]) % q) % q)
+        y3o.append(((y1e[i] * y2o[i]) % q + (y1o[i] * y2e[i]) % q) % q)
+    return y3e, y3o
