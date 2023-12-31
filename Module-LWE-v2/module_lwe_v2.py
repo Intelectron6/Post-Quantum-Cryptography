@@ -19,12 +19,12 @@ pwmf = ntt2.gen_pwmf(psin, n, q)
 # Polynomial multiplication under mod (x^n + 1) using NTT-INTT method
 def poly_mul_ntt(x1, x2):
 
-    y1e, y1o = ntt_256(x1, psis, q, n)
-    y2e, y2o = ntt_256(x2, psis, q, n)
+    y1e, y1o = ntt2.ntt_256(x1, psis, q, n)
+    y2e, y2o = ntt2.ntt_256(x2, psis, q, n)
 
-    y3e, y3o = point_wise_mult(y1e, y1o, y2e, y2o, pwmf)
+    y3e, y3o = ntt2.point_wise_mult(y1e, y1o, y2e, y2o, pwmf)
 
-    z = intt_256(y3e, y3o, inv_psis, q, n, inv_n)
+    z = ntt2.intt_256(y3e, y3o, inv_psis, q, n, inv_n)
 
     return z
 
