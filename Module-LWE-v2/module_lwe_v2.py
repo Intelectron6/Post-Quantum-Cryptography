@@ -18,33 +18,13 @@ pwmf = ntt2.gen_pwmf(psin, n, q)
 
 # Polynomial multiplication under mod (x^n + 1) using NTT-INTT method
 def poly_mul_ntt(x1, x2):
-    x1e, x1o = [], []
-    x2e, x2o = [], []
-    for i in range(n2):
-        if i%2 == 0:
-            x1e.append(x1[i])
-            x2e.append(x2[i])
-        else:
-            x1o.append(x1[i])
-            x2o.append(x2[i])
 
-    y1e = ntt2.ct_ntt(x1e, psis, q, n)
-    y1o = ntt2.ct_ntt(x1o, psis, q, n)
-    y2e = ntt2.ct_ntt(x2e, psis, q, n)
-    y2o = ntt2.ct_ntt(x2o, psis, q, n)
+    y1e, y1o = ntt_256(x1, psis, q, n)
+    y2e, y2o = ntt_256(x2, psis, q, n)
 
-    y3e, y3o = [], []
-    for i in range(n):
-        y3e.append(((y1e[i] * y2e[i]) % q + (((y1o[i] * y2o[i]) % q) * pwmf[i]) % q) % q)
-        y3o.append(((y1e[i] * y2o[i]) % q + (y1o[i] * y2e[i]) % q) % q)
+    y3e, y3o = point_wise_mult(y1e, y1o, y2e, y2o, pwmf)
 
-    ze = ntt2.gs_intt(y3e, inv_psis, q, n, inv_n)
-    zo = ntt2.gs_intt(y3o, inv_psis, q, n, inv_n)
-
-    z = []
-    for i in range(n):
-        z.append(ze[i])
-        z.append(zo[i])
+    z = intt_256(y3e, y3o, inv_psis, q, n, inv_n)
 
     return z
 
